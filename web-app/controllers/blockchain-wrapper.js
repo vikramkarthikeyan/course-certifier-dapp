@@ -2,11 +2,10 @@ var config = require('../config.json');
 var Web3 = require('web3');
 const Tx = require('ethereumjs-tx');
 
-
-var web3 = new Web3(new Web3.providers.HttpProvider(config.blockchain_endpoint));
+var web3 = new Web3(new Web3.providers.WebsocketProvider(config.blockchain_endpoint));
 
 // Setup contract instance
-var contractArtifact = require('../../survey-contract/build/contracts/Survey.json');
+var contractArtifact = require('../../../course-certifier-contract/build/contracts/DICCertification.json');
 var contractInstance = new web3.eth.Contract(contractArtifact.abi, config.contract_address);
 
 module.exports = {
@@ -40,57 +39,41 @@ module.exports = {
     },
 
     // Wrappers for Smart Contract functions
-    getRegisterUserABI: function(personNumber, callback) {
-        callback(contractInstance.methods.registerUser(personNumber).encodeABI());
+    getAddCSCourseABI: function(personNumber, programCode, courseGPA, callback) {
+        callback(contractInstance.methods.addCSCourse(personNumber, programCode, courseGPA).encodeABI());
     },
 
-    getSurveyEntryABI: function(personNumber, callback) {
-        callback(contractInstance.methods.addSurveyEntry(personNumber).encodeABI());
+    getAddNonCSCourseABI: function(personNumber, programCode, courseGPA, callback) {
+        callback(contractInstance.methods.addNonCSCourse(personNumber, programCode, courseGPA).encodeABI());
     },
 
-    getRedeemPointsABI: function(personNumber, points, callback) {
-        callback(contractInstance.methods.redeemPoints(personNumber, points).encodeABI());
+    getVerifyCapstoneProjectABI: function(personNumber, callback) {
+        callback(contractInstance.methods.verifyCapstoneProject(personNumber).encodeABI());
     },
 
-    getBanUserABI: function(personNumber, callback) {
-        callback(contractInstance.methods.banUser(personNumber).encodeABI());
+    getVerifyDomainRequirementABI: function(personNumber, callback) {
+        callback(contractInstance.methods.verifyDomainRequirement(personNumber).encodeABI());
     },
 
-    getUpdateUserHashABI: function(personNumber, hash, callback) {
-        console.log(hash.toString());
-        // console.log(web3.utils.fromAscii(hash));
-        callback(contractInstance.methods.updateUserHash(personNumber, hash).encodeABI());
+    getCheckEligibility: function(personNumber, callback) {
+        callback(contractInstance.methods.checkEligibility(personNumber).encodeABI());
     },
 
-    getSurveyCount: function(callback) {
-        contractInstance.methods.getSurveyCount().call().then(function(count){
-            callback(count);
-        });
-    },
-
-    getPoints: function(personNumber, callback) {
-        contractInstance.methods.getPoints(personNumber).call().then(function(points){
-            callback(points, null);
-        }).catch((error) => {
-            callback(null, "Transaction Reverted");
-        });
-    },
-
-    getUserHash: function(personNumber, callback) {
-        contractInstance.methods.getUserHash(personNumber).call().then(function(points){
-            callback(points, null);
-        }).catch((error) => {
-            callback(null, "Transaction Reverted");
-        });
+    waitForEvents: function(callback) {
+        contractInstance.events.allEvents({ fromBlock: 'latest' })
+            .on('data', console.log)
+            .on('changed', console.log)
+            .on('error', console.log)
     }
+
 };
 
 function numStringToBytes32(num) { 
     var bn = web3.utils.toBN(num);
     return padToBytes32(bn.toString(16));
- }
+}
 
- function padToBytes32(n) {
+function padToBytes32(n) {
     while (n.length < 64) {
         n = "0" + n;
     }
