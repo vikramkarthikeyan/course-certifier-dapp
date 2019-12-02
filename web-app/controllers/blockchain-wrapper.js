@@ -1,5 +1,6 @@
 var config = require('../config.json');
 var Web3 = require('web3');
+var socketWrapper = require('./socket-wrapper');
 const Tx = require('ethereumjs-tx');
 
 var web3 = new Web3(new Web3.providers.WebsocketProvider(config.blockchain_endpoint));
@@ -61,7 +62,9 @@ module.exports = {
 
     waitForEvents: function(callback) {
         contractInstance.events.allEvents({ fromBlock: 'latest' })
-            .on('data', console.log)
+            .on('data', function(data) {
+                socketWrapper.publishEvent(data);
+            })
             .on('changed', console.log)
             .on('error', console.log)
     }

@@ -34,7 +34,7 @@
                     <i class="fa fa-bars"></i>
                 </button>
           <a class="navbar-brand" href="index.html">
-                    <img src="img/logo.png" alt="" width="275" height="40" />
+                    <img src="img/logo.png" alt="" width="260" height="40" />
                 </a>
         </div>
 
@@ -91,50 +91,42 @@
             <div class="wow fadeInRight" data-wow-delay="0.3s">
 
               <div class="features">
-                <i class="fa fa-check fa-2x circled bg-skin float-left"></i>
+                <span id="pre-requisite-icon"></span>
                 <h5>Pre-requisites</h5>
                 <p id="pre-requisite-result">
-                  <small>All pre-requisites satisfied</small>
                 </p>
               </div>
 
               <div class="features">
-                <i class="fa fa-check fa-2x circled bg-skin float-left"></i>
+                <span id="required-courses-icon"></span>
                 <h5>Required courses</h5>
                 <p id="required-result">
-                  <small>All required courses satisfied</small>
                 </p>
               </div>
 
               <div class="features">
-                <i class="fa fa-check fa-2x circled bg-skin float-left"></i>
+                <span id="gpa-requirement-icon"></span>
                 <h5>GPA</h5>
                 <p id="gpa-result">
-                  <small>GPA requirement satisfied</small>
                 </p>
               </div>
 
               <div class="features">
-                  <!-- <i class="fa fa-check fa-2x circled bg-skin float-left"></i> -->
-                  <i class="fa fa-remove fa-2x circled bg-red float-left"></i>
+                  <span id="project-requirement-icon"></span>
                   <h5>Capstone project</h5>
                   <p id="project-result">
-                    <small>Project requirement not satisfied, contact administrator</small>
                   </p>
               </div>
 
               <div class="features">
-                  <!-- <i class="fa fa-check fa-2x circled bg-skin float-left"></i> -->
-                  <i class="fa fa-remove fa-2x circled bg-red float-left"></i>
+                  <span id="domain-requirement-icon"></span>
                   <h5>Domain requirement</h5>
-                  <p id="project-result">
-                    <small>Domain requirement not satisfied, contact administrator</small>
+                  <p id="domain-result">
                   </p>
               </div>
             </div>
           </div>
         </div>
-        <!-- <div class="divider-short" style="margin-top:0px"></div> -->
         <div class="row">
             <div class="text-center">
                 <button type="submit" id="evaluate-another" title="Evaluate" class="btn btn-success wow btn-lg ub-button">Evaluate another student</button>
@@ -163,16 +155,21 @@
               </div>
 
               <!-- Person number form start -->
-              <div class="row" id="contactform">
-                  <div class="col-lg-12">
-                      <form action="" method="post" role="form" class="contactForm">
+              <div class="row" id="person-number-form-container">
+                  <div class="col-lg-8 col-lg-offset-2">
+                      <form action="javascript:submitPersonNumber()" role="form" class="person-number-form">
                           <div class="row">
-                            <div class="form-group col-lg-offset-3 col-lg-6">
-                              <input type="text" name="name" class="form-control" id="name" placeholder="Your UB person number" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
+
+                            <div class="form-group">
+                              <label for="exampleFormControlInput1">Submit person number to check eligibility and submit courses</label>
+                              <input type="text" class="form-control" id="person-number-field" name="person-number" placeholder="UB Person Number" data-rule="minlen:8" data-msg="Please enter atleast 8 characters">
                               <div class="validation"></div>
                             </div>
                           </div>
-                          <div class="text-center"><button type="submit" title="Send Message" class="btn btn-lg ub-button btn-success wow">Submit</button></div>
+                          <div class="text-center">
+                            <button id="person-number-submit" type="submit" title="Send Message" class="btn btn-lg ub-button wow">Submit</button>
+                            <button id="evaluate" title="Evaluate" class="btn btn-lg wow ub-button">Evaluate eligibility</button>
+                          </div>
                       </form>
                   </div>
               </div>
@@ -180,36 +177,37 @@
               <div class="divider-short"></div>
               <!-- Contact form start -->
 
-              <div class="row" id="contactform">
+              <div class="row" id="course-form-container">
       
-                <div class="col-lg-12">
-      
-                  <div class="form">
-                    <div id="sendmessage">The course information will be added to the blockchain</div>
-                    <div id="errormessage"></div>
-                    <form action="" method="" role="form" class="">
-                      <div class="row">
-                        <div class="form-group col-lg-6">
-                          <input type="text" name="department" class="form-control" id="department" placeholder="Department (Ex: CSE)" data-rule="minlen:3" data-msg="Please enter at least 3 chars" />
+                <div class="col-lg-8 col-lg-offset-2">
+                    <form action="javascript:addCourse()" role="form" class="course-form">
+
+                        <div class="form-group">
+                          <label for="exampleFormControlSelect1">Select Department</label>
+                          <select class="form-control" id="department">
+                            <option>Computer Science</option>
+                            <option>Other</option>
+                          </select>
+                        </div>
+
+                        <div class="form-group">
+                          <label for="exampleFormControlInput1">Course Number</label>
+                          <input type="text" class="form-control" id="course" name="course" placeholder="Ex: 115" data-rule="minlen:3" data-msg="Please enter atleast 3 characters">
                           <div class="validation"></div>
                         </div>
-                        <div class="form-group col-lg-6">
-                          <input type="text" class="form-control" name="course" id="course" placeholder="Course Number" data-rule="minlen:3" data-msg="Please enter atleast 3 chars" />
-                          <div class="validation"></div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlInput1">Course Grade</label>
+                            <input type="text" class="form-control" id="grade" name="grade" placeholder="Ex: 4.0" data-rule="minlen:1" data-msg="Please enter atleast 1 character">
+                            <div class="validation"></div>
                         </div>
-                      </div>
-                      <div class="form-group">
-                        <input type="text" class="form-control" name="grade" id="grade" placeholder="Course grade" data-rule="minlen:2" data-msg="Please enter at least 2 chars" />
-                        <div class="validation"></div>
-                      </div>
-                      <div class="text-center">
-                        <button title="Send Message" class="btn btn-lg wow btn-success ub-button">Submit course</button>
-                        <button id="evaluate" title="Evaluate" class="btn btn-lg wow btn-success ub-button">Evaluate eligibility</button>
-                      </div>
+
+                        <div class="text-center">
+                        <button title="Send Message" class="btn btn-lg wow ub-button">Submit course</button>
+                        </div>
+                        
                     </form>
-                  </div>
-                </div>
-      
+                  </div>      
               </div>
 
               <!-- Contact form ends -->
@@ -233,6 +231,7 @@
   <a href="#" class="scrollup"><i class="fa fa-angle-up active"></i></a>
 
   <!-- Core JavaScript Files -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.js"></script>
   <script src="js/jquery.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/jquery.easing.min.js"></script>
@@ -240,6 +239,7 @@
   <script src="js/jquery.scrollTo.js"></script>
   <script src="js/nivo-lightbox.min.js"></script>
   <script src="js/custom.js"></script>
+  <script src="js/localizations.js"></script>
   <script src="js/app.js"></script>
   <script src="contactform/contactform.js"></script>
 

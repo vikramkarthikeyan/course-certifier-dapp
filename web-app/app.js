@@ -7,8 +7,15 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var userRouter = require('./routes/user');
 var courseRouter = require('./routes/course');
+var socketWrapper = require('./controllers/socket-wrapper')
 
 var app = express();
+var server = require('http').Server(app);
+var io = require('socket.io')(server);
+
+// Establish socket port
+server.listen(80);
+socketWrapper.setSocketController(io);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
